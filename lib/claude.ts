@@ -37,7 +37,9 @@ ${jd}`,
     ],
   });
 
-  const text = message.content[0].type === "text" ? message.content[0].text : "";
+  const raw = message.content[0].type === "text" ? message.content[0].text : "";
+  // Strip markdown code blocks if Claude wraps the JSON
+  const text = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
   return JSON.parse(text) as AnalysisResult;
 }
 
