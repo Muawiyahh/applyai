@@ -34,7 +34,9 @@ export async function POST(req: NextRequest) {
     const result = await analyzeCV(cv, jd);
     usage.set(ip, count + 1);
     return NextResponse.json({ result, usesLeft: FREE_LIMIT - count - 1 });
-  } catch {
-    return NextResponse.json({ error: "Analysis failed. Please try again." }, { status: 500 });
+  } catch (err) {
+    console.error("[analyze] Error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
